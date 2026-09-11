@@ -1,68 +1,50 @@
-/**
- * Definition for a binary tree node.
- * public class TreeNode {
- *     int val;
- *     TreeNode left;
- *     TreeNode right;
- *     TreeNode() {}
- *     TreeNode(int val) { this.val = val; }
- *     TreeNode(int val, TreeNode left, TreeNode right) {
- *         this.val = val;
- *         this.left = left;
- *         this.right = right;
- *     }
- * }
- */
-/**
- * Definition for a binary tree node.
- * public class TreeNode {
- *     int val;
- *     TreeNode left;
- *     TreeNode right;
- *     TreeNode() {}
- *     TreeNode(int val) { this.val = val; }
- *     TreeNode(int val, TreeNode left, TreeNode right) {
- *         this.val = val;
- *         this.left = left;
- *         this.right = right;
- *     }
- * }
- */
 class Solution {
+
     public List<List<Integer>> zigzagLevelOrder(TreeNode root) {
 
-     Queue<TreeNode> queue = new LinkedList<>();
+        List<List<Integer>> res = new ArrayList<>();
 
-    List<List<Integer>> list = new ArrayList<>();
+        if (root == null) {
+            return res;
+        }
 
-    if(root==null) return new ArrayList<>();
+        Queue<TreeNode> q = new LinkedList<>();
+        q.offer(root);
 
-    queue.offer(root);
+        boolean reverse = false;
 
-boolean turn = false;
-    while(!queue.isEmpty()){
+        while (!q.isEmpty()) {
 
-List<Integer> ans = new ArrayList<>();
-       
-int s = queue.size();
-        for(int i =0; i < s; i++) {
-            TreeNode node = queue.poll();
-            ans.add(node.val);
-            if(node.left!=null) queue.offer(node.left);
-                if(node.right!=null) queue.offer(node.right);
-                
-                
-                
+            int lvlSize = q.size();
+
+            List<Integer> subList = new ArrayList<>();
+
+            while (lvlSize != 0) {
+
+                TreeNode t = q.poll();
+
+                subList.add(t.val);
+
+                if (t.left != null) {
+                    q.offer(t.left);
+                }
+
+                if (t.right != null) {
+                    q.offer(t.right);
+                }
+
+                lvlSize--;
             }
-       
- 
-if(turn) Collections.reverse(ans);
-   turn = !turn;       
-     
-        list.add(new ArrayList<>(ans));
 
+            if (reverse) {
+                Collections.reverse(subList);
+            }
+
+            res.add(subList);
+
+            reverse = !reverse;
+        }
+
+        return res;
     }
-
-
-    return list;}
 }
