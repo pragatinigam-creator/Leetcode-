@@ -1,20 +1,42 @@
 class Solution {
-    public List<String> generateParenthesis(int n) {
-        List<String> res = new ArrayList<>();
-        backtrack(res, "", 0, 0, n);
-        return res;
-    }
+    private List<String> ans = new ArrayList<>();
 
-    void backtrack(List<String> res, String curr, int open, int close, int n) {
-        if(curr.length() == 2 * n) {
-            res.add(curr);
+    private void backtrack(StringBuilder s, int open, int close, int n) {
+
+        // A complete valid combination is formed
+        if (s.length() == 2 * n) {
+            ans.add(s.toString());
             return;
         }
 
-        if(open < n)
-            backtrack(res, curr + "(", open + 1, close, n);
+        // Add '(' if opening brackets are still available
+        if (open < n) {
+            s.append('(');
 
-        if(close < open)
-            backtrack(res, curr + ")", open, close + 1, n);
+            backtrack(s, open + 1, close, n);
+
+            // Undo the choice
+            s.deleteCharAt(s.length() - 1);
+        }
+
+        // Add ')' only when it is safe
+        if (close < open) {
+            s.append(')');
+
+            backtrack(s, open, close + 1, n);
+
+            // Undo the choice
+            s.deleteCharAt(s.length() - 1);
+        }
+    }
+
+    public List<String> generateParenthesis(int n) {
+        ans.clear();
+
+        StringBuilder s = new StringBuilder(2 * n);
+
+        backtrack(s, 0, 0, n);
+
+        return ans;
     }
 }
